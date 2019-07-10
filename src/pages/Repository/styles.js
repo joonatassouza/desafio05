@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const Loading = styled.div`
   color: #fff;
@@ -41,10 +41,50 @@ export const Owner = styled.header`
   }
 `;
 
-export const IssueList = styled.ul`
-  padding-top: 30px;
+export const Filters = styled.ul`
+  list-style: none;
   margin-top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const FilterState = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #7159c1;
+  border-radius: 4px;
+  width: 100px;
+  height: 40px;
+  text-transform: uppercase;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    background: #7159c1;
+    color: #fff;
+  }
+
+  & + li {
+    margin-left: 5px;
+  }
+
+  ${props =>
+    props.selected &&
+    css`
+       {
+        background: #7159c1;
+        color: #fff;
+      }
+    `}
+`;
+
+export const IssueList = styled.ul`
+  padding: 10px 0;
+  margin: 10px 0;
   border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
   list-style: none;
 
   li {

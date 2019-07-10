@@ -12,6 +12,7 @@ export default class Main extends Component {
     newRepo: '',
     repositories: [],
     loading: false,
+    hasError: false,
   };
 
   componentDidMount() {
@@ -31,7 +32,7 @@ export default class Main extends Component {
   }
 
   handleInputChange = e => {
-    this.setState({ newRepo: e.target.value });
+    this.setState({ newRepo: e.target.value, hasError: false });
   };
 
   handleSubmit = async e => {
@@ -39,23 +40,35 @@ export default class Main extends Component {
 
     this.setState({ loading: true });
 
-    const { newRepo, repositories } = this.state;
+    try {
+      const { newRepo, repositories } = this.state;
 
-    const response = await api.get(`/repos/${newRepo}`);
+      if (repositories.find(repository => repository.name === newRepo)) {
+        throw 'Duplicated repository';
+      }
 
-    const data = {
-      name: response.data.full_name,
-    };
+      const response = await api.get(`/repos/${newRepo}`);
 
-    this.setState({
-      repositories: [...repositories, data],
-      newRepo: '',
-      loading: false,
-    });
+      const data = {
+        name: response.data.full_name,
+      };
+
+      this.setState({
+        repositories: [...repositories, data],
+        newRepo: '',
+        loading: false,
+        hasError: false,
+      });
+    } catch (err) {
+      this.setState({
+        hasError: true,
+        loading: false,
+      });
+    }
   };
 
   render() {
-    const { newRepo, repositories, loading } = this.state;
+    const { newRepo, repositories, loading, hasError } = this.state;
 
     return (
       <Container>
@@ -64,7 +77,7 @@ export default class Main extends Component {
           Repositories
         </h1>
 
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit} hasError={hasError}>
           <input
             type="text"
             value={newRepo}

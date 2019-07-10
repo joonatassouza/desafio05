@@ -12,6 +12,15 @@ export const Form = styled.form`
     border-radius: 4px;
     font-size: 16px;
   }
+
+  ${props =>
+    props.hasError &&
+    css`
+      input {
+        border-color: rgba(255, 0, 0, 0.5);
+        box-shadow: 0px 0px 5px 0px rgba(255, 0, 0, 0.5);
+      }
+    `}
 `;
 
 const rotate = keyframes`
